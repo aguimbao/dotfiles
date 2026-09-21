@@ -30,6 +30,8 @@
     "tor"
     "sway"
     "atuin-server"
+    "ventoy"
+    "keymapp"
     "disko"
     "impermanence"
   ];
