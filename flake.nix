@@ -62,27 +62,21 @@
             (builtins.attrNames (lib.filterAttrs (_: type: type == "directory") (builtins.readDir dir)))
           else [];
 
+      # Routing (no registration): same tree feeds both systems by filename.
+      # - default.nix / home.nix -> Home Manager only
+      # - system.nix -> NixOS top-level only
+      # NOTE: cross-system `lib.mkIf (options ? ...)` guards do NOT work:
+      # merely defining an unknown option path fails eval even under a
+      # false mkIf, so NixOS-only files must never enter the HM import list.
       walk = disabledEntries: dir: pathSegs:
         if builtins.any (e: pathContains e pathSegs) disabledEntries
         then { nixosTop = []; hm = []; tags = [ pathSegs ]; }
         else
           let
-            defaultPath = dir + "/default.nix";
-            homePath = dir + "/home.nix";
-            systemPath = dir + "/system.nix";
-            hasDefault = builtins.pathExists defaultPath;
-            hasHome = builtins.pathExists homePath;
-            hasSystem = builtins.pathExists systemPath;
-            defaultIsBoth = hasDefault && lib.hasInfix "options ?" (builtins.readFile defaultPath);
-            hereNixosTop =
-              (if hasSystem then [ systemPath ] else [])
-              ++ (if defaultIsBoth then [ defaultPath ] else []);
-            hereHm =
-              (if hasHome then [ homePath ] else [])
-              ++ (if hasDefault && !defaultIsBoth then [ defaultPath ] else [])
-              ++ (if defaultIsBoth then [ defaultPath ] else []);
-            rawChildren = dirChildNames dir;
-            children = rawChildren;
+            hereNixosTop = lib.optional (builtins.pathExists (dir + "/system.nix")) (dir + "/system.nix");
+            hereHm = lib.optional (builtins.pathExists (dir + "/default.nix")) (dir + "/default.nix")
+              ++ lib.optional (builtins.pathExists (dir + "/home.nix")) (dir + "/home.nix");
+            children = dirChildNames dir;
             childResults = map (k: walk disabledEntries (dir + "/${k}") (pathSegs ++ [ k ])) children;
             mergedNixosTop = hereNixosTop ++ builtins.concatLists (map (r: r.nixosTop) childResults);
             mergedHm = hereHm ++ builtins.concatLists (map (r: r.hm) childResults);

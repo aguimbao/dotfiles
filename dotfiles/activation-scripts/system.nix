@@ -1,4 +1,4 @@
-{ config, lib, options, homeManagerUser, ... }:
+{ config, lib, homeManagerUser, ... }:
 
 let
   cfg = config.dotfiles.activation-scripts.scripts;
@@ -15,13 +15,7 @@ in
     description = "Activation scripts keyed by name. Body is run as-is by Home Manager.";
   };
 
-  config = lib.mkMerge [
-    (lib.mkIf (options ? home.activation) {
-      home.activation = activationEntries;
-    })
-
-    (lib.mkIf (options ? home-manager.users) {
-      home-manager.users.${homeManagerUser}.home.activation = activationEntries;
-    })
-  ];
+  config = {
+    home-manager.users.${homeManagerUser}.home.activation = activationEntries;
+  };
 }
