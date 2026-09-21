@@ -94,7 +94,7 @@
             config.allowUnfreePredicate = pkg:
               let name = lib.getName pkg; in
               (lib.hasPrefix "steam" name)
-              || (builtins.elem name [ "unityhub" "discord" "protonvpn" "proton-pass" ]);
+              || (builtins.elem name [ "unityhub" "discord" "proton-vpn-cli" "proton-pass" ]);
           };
           getParams = nodePath: defaults:
             let tag = builtins.head nodePath; in
@@ -152,7 +152,7 @@
               {
                 home.username = homeManagerUser;
                 home.homeDirectory =
-                  if pkgs.stdenv.isDarwin
+                  if pkgs.stdenv.hostPlatform.isDarwin
                   then "/Users/${homeManagerUser}"
                   else "/home/${homeManagerUser}";
                 home.stateVersion = "24.05";
