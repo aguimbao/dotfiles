@@ -37,12 +37,14 @@ else
 fi
 [ -f "$FLAKE_DIR/hosts/$HOST.nix" ] || die "no hosts/$HOST.nix (edit one, see hosts/nixos-host.nix)"
 
-# 1. Flakes on (live ISO is root-writable tmpfs, persists for the session).
+# 1. Flakes on (per-user config files; /etc is read-only on the live ISO,
+# so enable flakes via $HOME and /root instead of /etc/nix/nix.conf).
 step "1/5 nix flakes + network"
-if ! grep -q "experimental-features" /etc/nix/nix.conf 2>/dev/null; then
-  echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf >/dev/null
-  sudo systemctl restart nix-daemon 2>/dev/null || true
-fi
+mkdir -p "$HOME/.config/nix"
+grep -q "experimental-features" "$HOME/.config/nix/nix.conf" 2>/dev/null || \
+  echo "experimental-features = nix-command flakes" >> "$HOME/.config/nix/nix.conf"
+sudo mkdir -p /root/.config/nix
+sudo sh -c 'grep -q "experimental-features" /root/.config/nix/nix.conf 2>/dev/null || echo "experimental-features = nix-command flakes" >> /root/.config/nix/nix.conf'
 ping -c1 -W3 nixos.org >/dev/null 2>&1 || die "no network (check cable/wifi via nmtui, then re-run)"
 
 # 2. Live tooling profile: nushell + fnox + pass-cli + git + vpn (RAM only).
