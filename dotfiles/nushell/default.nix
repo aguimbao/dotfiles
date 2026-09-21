@@ -101,16 +101,22 @@ let
     # You can remove these comments if you want or leave
     # them for future reference.
   '';
+  fileEntry = lib.types.submodule {
+    options.text = lib.mkOption {
+      type = lib.types.lines;
+      description = "File content.";
+    };
+  };
 in
 {
   options.dotfiles.nushell.modules = lib.mkOption {
-    type = lib.types.attrsOf lib.types.lines;
+    type = lib.types.attrsOf fileEntry;
     default = {};
     description = "Nushell modules by filename (without .nu). Rendered to ~/.config/nushell/modules/<name>.nu. Keep `export` on definitions.";
   };
 
   options.dotfiles.nushell.autoload = lib.mkOption {
-    type = lib.types.attrsOf lib.types.lines;
+    type = lib.types.attrsOf fileEntry;
     default = {};
     description = "Nushell autoload files by filename (without .nu). Rendered to ~/.config/nushell/autoload/<name>.nu.";
   };
@@ -157,8 +163,8 @@ in
     home.packages = [ pkgs.nushell ];
 
     xdg.configFile =
-      (lib.mapAttrs' (n: t: lib.nameValuePair "nushell/modules/${n}.nu" { text = t; }) modCfg)
-      // (lib.mapAttrs' (n: t: lib.nameValuePair "nushell/autoload/${n}.nu" { text = t; }) autoCfg)
+      (lib.mapAttrs' (n: t: lib.nameValuePair "nushell/modules/${n}.nu" { text = t.text; }) modCfg)
+      // (lib.mapAttrs' (n: t: lib.nameValuePair "nushell/autoload/${n}.nu" { text = t.text; }) autoCfg)
       // {
         "nushell/modules/__dotfiles_all.nu".text = allRunnerModule;
         "nushell/autoload/__dotfiles_aliases.nu".text = aliasesFile;
