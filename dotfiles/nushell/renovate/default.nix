@@ -12,12 +12,12 @@ export def --wrapped main [...args] {
 export def --wrapped ",rnv" [...args] {
     main ...$args
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "renovate".text = ''
 use ../modules/renovate.nu *
-    ''
+    '';
   };
 }

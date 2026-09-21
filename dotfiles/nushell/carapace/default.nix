@@ -21,6 +21,6 @@ $env.config = ($env.config? | default {} | merge {
         }
     }
 })
-    ''
+    '';
   };
 }

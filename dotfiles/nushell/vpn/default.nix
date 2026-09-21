@@ -21,12 +21,12 @@ export def ",vpn off" [] {
     ^sudo resolvectl dns eth0 1.1.1.1
     ^sudo resolvectl domain eth0 '~.'
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "vpn".text = ''
 use ../modules/vpn.nu *
-    ''
+    '';
   };
 }

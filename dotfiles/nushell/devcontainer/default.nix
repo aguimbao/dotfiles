@@ -25,12 +25,12 @@ export def --wrapped ",dc down" [...args] {
         ^podman rm --force ...$ids
     }
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "devcontainer".text = ''
 use ../modules/devcontainer.nu *
-    ''
+    '';
   };
 }

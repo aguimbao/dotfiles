@@ -7,7 +7,7 @@
   dotfiles.nushell.autoload = {
     "nushell".text = ''
 $env.config.show_banner = false
-    ''
+    '';
   };
 
   dotfiles.nushell.envExtra = [

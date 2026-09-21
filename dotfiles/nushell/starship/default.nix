@@ -61,7 +61,7 @@ export-env { $env.STARSHIP_SHELL = "nu"; load-env {
         )
     }
 }}
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
@@ -80,6 +80,6 @@ try {
         } | ignore
     }
 }
-    ''
+    '';
   };
 }

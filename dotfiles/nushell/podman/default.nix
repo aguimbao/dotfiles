@@ -88,12 +88,12 @@ export def --env ",pm exec" [] {
         ^podman --connection $connection exec -it $container $shell
     }
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "podman".text = ''
 use ../modules/podman.nu *
-    ''
+    '';
   };
 }

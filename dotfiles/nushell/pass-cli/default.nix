@@ -1034,12 +1034,12 @@ export def ",pc value-find" [
 
     print "Search complete."
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "pass-cli".text = ''
 use ../modules/pass-cli.nu *
-    ''
+    '';
   };
 }

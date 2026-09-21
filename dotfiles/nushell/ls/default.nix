@@ -10,12 +10,12 @@ export def --wrapped ",l" [...args] {
 export def --wrapped ",lt" [...args] {
     ^ls -lat ...$args
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "ls".text = ''
 use ../modules/ls.nu *
-    ''
+    '';
   };
 }

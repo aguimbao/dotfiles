@@ -26,12 +26,12 @@ export-env {
         }
     }
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "ssh".text = ''
 use ../modules/ssh.nu *
-    ''
+    '';
   };
 }

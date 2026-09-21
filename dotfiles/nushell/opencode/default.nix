@@ -151,13 +151,13 @@ export def ",oc pr-details" [
 ] {
     _oc run-one generate-gh-pr-details $dir
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "opencode".text = ''
 use ../modules/opencode.nu *
-    ''
+    '';
   };
 
   dotfiles.fnox.profiles.omniroute.secrets = {};

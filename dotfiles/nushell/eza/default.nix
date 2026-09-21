@@ -14,12 +14,12 @@ export def --wrapped ",e" [...args] {
 export def --wrapped ",et" [...args] {
     main -lars modified ...$args
 }
-    ''
+    '';
   };
 
   dotfiles.nushell.autoload = {
     "eza".text = ''
 use ../modules/eza.nu *
-    ''
+    '';
   };
 }
