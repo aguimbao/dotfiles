@@ -46,6 +46,18 @@ grep -q "experimental-features" "$HOME/.config/nix/nix.conf" 2>/dev/null || \
 sudo mkdir -p /root/.config/nix
 sudo sh -c 'grep -q "experimental-features" /root/.config/nix/nix.conf 2>/dev/null || echo "experimental-features = nix-command flakes" >> /root/.config/nix/nix.conf'
 ping -c1 -W3 nixos.org >/dev/null 2>&1 || die "no network (check cable/wifi via nmtui, then re-run)"
+mem_gb=$(free -g | awk '/^Mem:/{print $2}')
+if [ "${mem_gb:-0}" -lt 4 ]; then
+  echo "WARNING: only ${mem_gb:-?}GB RAM — nix eval + install wants 8GB. Bump the VM RAM if you can."
+  echo "Stopgap: enabling 4G zram swap for this session..."
+  sudo modprobe zram num_devices=1 2>/dev/null || true
+  if [ -e /sys/block/zram0/disksize ]; then
+    echo lz4 | sudo tee /sys/block/zram0/comp_algorithm >/dev/null 2>&1 || true
+    echo 4G | sudo tee /sys/block/zram0/disksize >/dev/null 2>&1 || true
+    sudo mkswap /dev/zram0 >/dev/null 2>&1 && sudo swapon -p 100 /dev/zram0 || true
+  fi
+  free -h | head -n 3 || true
+fi
 
 # 2. Live tooling profile: nushell + fnox + pass-cli + git + vpn (RAM only).
 step "2/5 live tooling (home-manager $LIVE_REF, takes a while)"

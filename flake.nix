@@ -121,7 +121,7 @@
           flatTags = lib.unique (builtins.concatMap flattenSegs allTags);
           unusedParams = builtins.filter (p: !(builtins.elem p flatTags)) paramNames;
           warningsModule = {
-            warnings =
+            config.warnings =
               (map (e: "dotfiles: disabled '${e}' matches nothing") unusedDisabled)
               ++ (map (p: "dotfiles: params '${p}' matches no tool") unusedParams);
           };

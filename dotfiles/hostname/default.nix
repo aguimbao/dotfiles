@@ -11,14 +11,17 @@ in
     description = "System hostname (required: manifest.params.hostname.value).";
   };
 
-  assertions = lib.optionals (options ? networking) [
-    {
-      assertion = value != null;
-      message = "manifest.params.hostname.value is required (generate one with `new-hostname`)";
-    }
+  config = lib.mkMerge [
+    (lib.mkIf (options ? networking) {
+      assertions = [
+        {
+          assertion = value != null;
+          message = "manifest.params.hostname.value is required (generate one with `new-hostname`)";
+        }
+      ];
+    })
+    (lib.mkIf ((options ? networking) && value != null) {
+      networking.hostName = value;
+    })
   ];
-
-  config = lib.mkIf ((options ? networking) && value != null) {
-    networking.hostName = value;
-  };
 }
