@@ -5,6 +5,9 @@
   home-manager-user = "nixos";
   system = "x86_64-linux";
   disabled = [
+    # Live session runs from RAM: keep only install essentials
+    # (git/gh/fnox/pass/vpn/tailscale/shell). Everything else arrives
+    # with the real host.
     "steam"
     "discord"
     "qbittorrent"
@@ -30,10 +33,47 @@
     "tor"
     "sway"
     "atuin-server"
+    "atuin"
     "ventoy"
-    "keymapp"
     "disko"
     "impermanence"
+    "proton-pass"
+    "ghostty"
+    "vscodium"
+    "zellij"
+    "neovim"
+    "podman"
+    "devcontainer"
+    "opencode"
+    "renovate"
+    "jujutsu"
+    "skim"
+    "lazygit"
+    "glances"
+    "hyperfine"
+    "yazi"
+    "mutagen"
+    "go"
+    "rust"
+    "nodejs"
+    "bun"
+    "python"
+    "uv"
+    "ffmpeg"
+    "kubectl"
+    "cloudflared"
+    "fonts"
+    "bluetooth"
+    "carapace"
+    "lfk"
+    "hunk"
+    "viu"
+    "gping"
+    "ast-grep"
+    "dive"
+    "jaq"
+    "hexyl"
+    "procs"
   ];
   params = {
     git.name = "Abraham";
