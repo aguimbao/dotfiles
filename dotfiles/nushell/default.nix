@@ -18,7 +18,7 @@ let
               {
                 name: "${cmd}";
                 ok: (try { ${cmd}; true } catch { false })
-              }''') commands
+              }'') commands
           }]
           print (run_aggregate_results "${label}" $results)
         }
