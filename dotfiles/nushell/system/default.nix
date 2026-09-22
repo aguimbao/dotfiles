@@ -9,10 +9,9 @@
 
   dotfiles.nushell.modules = {
     "system".text = ''
-use ./pass-cli.nu *
-use ./podman.nu *
-
 export def --env ",sys setup" [] {
+  use ./pass-cli.nu *
+  use ./podman.nu *
   cd
   ,pc pat-login-purge
   ,pc pat-login

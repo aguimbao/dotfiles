@@ -70,6 +70,8 @@ cat <<EOF
 Opening nushell. Run these, then 'exit' to continue the install:
   setup-pass-cli
   ,pc pat-login
+  init-pass-secret-service
+  systemctl --user restart pass-secret-service  # was expected to fail before init
   ,pc ssh-keys-load
   (optional) ,vpn on            # only if you need masked traffic first
   (optional) setup-proton-drive # only if you need drive restores now

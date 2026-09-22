@@ -3,11 +3,6 @@
 {
   dotfiles.nushell.modules = {
     "git-gh".text = ''
-use ./opencode.nu [",oc branch-name", ",oc commit-message", ",oc pr-details"]
-use ./gh.nu gh
-
-
-
 export def --wrapped ",g" [...args] {
     git ...$args
 }
@@ -491,6 +486,8 @@ Flags:
 
 # Orchestrate full git & GitHub workflow (branch, stage, commit, push, PR, merge, restore, prune, pull)
 export def --wrapped ",g-gh-oc full-flow" [...args] {
+    use ./opencode.nu [",oc branch-name", ",oc commit-message", ",oc pr-details"]
+    use ./gh-wrap.nu gh
     let parsed = (_g-gh-oc parse args $args)
 
     if ($parsed.help | default false) {
@@ -787,6 +784,7 @@ export def "_pr_resolve_rebase_conflicts" [work_dir: path] {
 }
 
 export def "_pr_rerun_failed_ci" [pr_number: int, head_sha: string, status_checks: any] {
+    use ./gh-wrap.nu gh
     let checks = ($status_checks | default [])
 
     let check_run_ids = (
@@ -855,6 +853,7 @@ export def ",g-gh prs-auto-merge" [
     --fix-ci
     --pr (-p): any
 ] {
+    use ./gh-wrap.nu gh
     let repo_root = (_wt repo root)
     let repo_id = (_wt repo id)
     let remote_url = (git -C $repo_root remote get-url origin | str trim)

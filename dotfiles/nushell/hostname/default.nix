@@ -4,7 +4,7 @@
   dotfiles.nushell.modules = {
     "hostname".text = ''
       export def new-hostname [] {
-        $"HOSTNAME-(^${pkgs.openssl}/bin/openssl rand -hex 4 | str trim | str upcase)"
+        $"HOSTNAME-(^${pkgs.openssl}/bin/openssl rand -hex 4 | str trim | str uppercase)"
       }
     '';
     "machine-id".text = ''

@@ -5,10 +5,9 @@
   };
 
   dotfiles.nushell.modules = {
-    "gh".text = ''
-use ./fnox.nu _fnox-run
-
+    "gh-wrap".text = ''
 export def --wrapped gh [...args] {
+  use ./fnox.nu _fnox-run
   _fnox-run -p github gh ...$args
 }
     '';
@@ -16,7 +15,7 @@ export def --wrapped gh [...args] {
 
   dotfiles.nushell.autoload = {
     "gh".text = ''
-use ../modules/gh.nu *
+use ../modules/gh-wrap.nu *
     '';
   };
 }

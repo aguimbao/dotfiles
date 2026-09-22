@@ -5,9 +5,8 @@
 
   dotfiles.nushell.modules = {
     "tailscale".text = ''
-use ./fnox.nu _fnox-run
-
 def "_ts login fnox" [...args] {
+    use ./fnox.nu _fnox-run
     _fnox-run -p tailscale "sh" "-c" 'tailscale login --authkey="$TS_AUTHKEY" "$@"' "--" ...$args
 }
 

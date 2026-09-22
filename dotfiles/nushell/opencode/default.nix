@@ -3,8 +3,6 @@
 {
   dotfiles.nushell.modules = {
     "opencode".text = ''
-use ./fnox.nu _fnox-run
-
 export def --wrapped ",oc" [...args] {
     main ...$args
 }
@@ -14,6 +12,7 @@ export def --wrapped ",oc s" [...args] {
 }
 
 export def --wrapped main [...args] {
+    use ./fnox.nu _fnox-run
     with-env {
         EDITOR: "code --wait"
     } {
