@@ -18,10 +18,11 @@ ${spec.preBackup}
       let parent = ($source | path dirname)
       let dir = ($source | path basename)
       let archive = "${spec.archiveName}"
-      let tar = ($archive | str replace --regex '\\.gz$' "")
       let tmp = (^mktemp -d | str trim)
-      ^${pkgs.gnutar}/bin/tar -cf $"($tmp)/($tar)" -C $parent $dir
-      ^${pkgs.gzip}/bin/gzip $"($tmp)/($tar)"
+      let cwd = $env.PWD
+      cd $parent
+      ^${pkgs.ouch}/bin/ouch compress $dir $"($tmp)/($archive)"
+      cd $cwd
       ^proton-drive filesystem upload $"($tmp)/($archive)" "${remoteRoot}/${spec.remoteName}/backup" --json
 ${spec.postBackup}
       rm -rf $tmp
@@ -37,7 +38,6 @@ ${spec.preSetup}
       let parent = ($source | path dirname)
       let dir = ($source | path basename)
       let archive = "${spec.archiveName}"
-      let tar = ($archive | str replace --regex '\\.gz$' "")
       let tmp = (^mktemp -d | str trim)
 
       let result = (try {
@@ -48,8 +48,7 @@ ${spec.preSetup}
       })
 
       if $result {
-        ^${pkgs.gzip}/bin/gzip -d $"($tmp)/($archive)"
-        ^${pkgs.gnutar}/bin/tar -xf $"($tmp)/($tar)" -C $tmp
+        ^${pkgs.ouch}/bin/ouch decompress $"($tmp)/($archive)" --dir $tmp
 ${spec.preRestore}
         if not ($"($tmp)/($dir)" | path exists) {
           print "Backup ${name}: extracted dir missing, keeping local data"

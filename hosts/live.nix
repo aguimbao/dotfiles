@@ -74,6 +74,12 @@
     "jaq"
     "hexyl"
     "procs"
+    "fish"
+    "inshellisense"
+    "cull"
+    "ctx7"
+    "plocate"
+    "bubblewrap"
   ];
   params = {
     git.name = "Abraham";
